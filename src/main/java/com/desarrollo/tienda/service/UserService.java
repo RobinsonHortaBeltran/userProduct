@@ -1,12 +1,15 @@
 package com.desarrollo.tienda.service;
 
+import com.desarrollo.tienda.dto.ProductDto;
+import com.desarrollo.tienda.dto.UserDto;
 import com.desarrollo.tienda.entity.UserModel;
 import com.desarrollo.tienda.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -14,29 +17,40 @@ public class UserService {
     IUserRepository userRepository;
 
     //Return all users
-    public ArrayList<UserModel> getAllUsers() {
+    /*public ArrayList<UserModel> getAllUsers() {
         return (ArrayList<UserModel>) this.userRepository.findAll();
+    }*/
+
+    public List<UserDto> getAllUsers() {
+        return this.userRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     //Return user by id
-    public Optional<UserModel> getUserById(Long id) {
-        return this.userRepository.findById(id);
+    public Optional<UserDto> getUserById(Long id) {
+        Optional<UserModel> user = this.userRepository.findById(id);
+        return user.map(this::convertToDto);
     }
 
     //Save user, return user saved
-    public UserModel saveUser(UserModel user) {
+    public UserModel saveUser(UserDto userDto) {
+        UserModel user = this.convertToEntity(userDto);
         return this.userRepository.save(user);
     }
 
     //Update user, return user updated
-    public Optional<UserModel> updateUser(UserModel request, Long id) {
+    public Optional<UserDto> updateUser(UserDto request, Long id) {
         Optional<UserModel> user = this.userRepository.findById(id);
         if (user.isPresent()) {
-            user.get().setFirstName(request.getFirstName());
-            user.get().setLastName(request.getLastName());
-            user.get().setEmail(request.getEmail());
+            UserModel existingUser = user.get();
+            existingUser.setFirstName(request.getFirstName());
+            existingUser.setLastName(request.getLastName());
+            existingUser.setEmail(request.getEmail());
 
-            return Optional.of(this.userRepository.save(user.get()));
+            UserModel updatedUser = this.userRepository.save(existingUser);
+            return Optional.of(this.convertToDto(updatedUser));
+            //return Optional.of(this.userRepository.save(user.get()));
         } else {
             return Optional.empty();
         }
@@ -50,6 +64,23 @@ public class UserService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public UserDto convertToDto(UserModel user) {
+
+        List<ProductDto> productDto = user.getProducts().stream()
+                .map(product -> new ProductDto(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getUser().getId()))
+                .toList();
+
+        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), productDto);
+    }
+
+    public UserModel convertToEntity(UserDto userDto) {
+        UserModel user = new UserModel();
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        return user;
     }
 
 }

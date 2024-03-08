@@ -31,7 +31,6 @@ public class UserModel {
 
     //Relation one to many with the product table
     @OneToMany(mappedBy = "user")
-    @JsonBackReference
     private List<ProductModel> products;
 
 }

@@ -1,5 +1,6 @@
 package com.desarrollo.tienda.controller;
 
+import com.desarrollo.tienda.dto.UserDto;
 import com.desarrollo.tienda.entity.UserModel;
 import com.desarrollo.tienda.repository.IUserRepository;
 import com.desarrollo.tienda.service.UserService;
@@ -18,8 +19,8 @@ public class UserController {
 
     //Get all users
     @GetMapping
-    public ArrayList<UserModel> getUsers(){
-        return this.userService.getAllUsers();
+    public ArrayList<UserDto> getUsers(){
+        return (ArrayList<UserDto>) this.userService.getAllUsers();
     }
 
     //Get user by id
