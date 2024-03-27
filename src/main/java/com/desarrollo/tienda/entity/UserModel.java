@@ -29,6 +29,10 @@ public class UserModel {
     @Column(name = "email", nullable = false, length = 50)
     private String email;
 
+    //Column password is the password of the column in the table
+    @Column(name = "password", nullable = false, length = 50)
+    private String password;
+
     //Relation one to many with the product table
     @OneToMany(mappedBy = "user")
     private List<ProductModel> products;

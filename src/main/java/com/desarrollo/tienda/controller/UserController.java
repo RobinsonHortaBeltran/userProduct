@@ -2,7 +2,6 @@ package com.desarrollo.tienda.controller;
 
 import com.desarrollo.tienda.dto.UserDto;
 import com.desarrollo.tienda.entity.UserModel;
-import com.desarrollo.tienda.repository.IUserRepository;
 import com.desarrollo.tienda.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,19 +24,19 @@ public class UserController {
 
     //Get user by id
     @GetMapping(path = "/{id}")
-    public Optional<UserModel> getUserById(@PathVariable("id") Long id){
+    public Optional<UserDto> getUserById(@PathVariable("id") Long id){
         return this.userService.getUserById(id);
     }
 
     //Save user
     @PostMapping("/")
-    public UserModel saveUser(@RequestBody UserModel user){
+    public UserModel saveUser(@RequestBody UserDto user){
         return this.userService.saveUser(user);
     }
 
     //Update user
     @PutMapping(path = "/{id}")
-    public Optional<UserModel> updateUser(@RequestBody UserModel user, @PathVariable("id") Long id){
+    public Optional<UserDto> updateUser(@RequestBody UserDto user, @PathVariable("id") Long id){
         return this.userService.updateUser(user, id);
     }
 

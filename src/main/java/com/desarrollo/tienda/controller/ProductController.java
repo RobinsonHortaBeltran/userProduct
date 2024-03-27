@@ -1,14 +1,9 @@
 package com.desarrollo.tienda.controller;
 
 import com.desarrollo.tienda.entity.ProductModel;
-import com.desarrollo.tienda.entity.UserModel;
 import com.desarrollo.tienda.service.ProductService;
 import com.desarrollo.tienda.service.UserService;
-import org.apache.catalina.User;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

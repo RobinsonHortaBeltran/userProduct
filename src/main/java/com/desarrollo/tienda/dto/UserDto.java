@@ -15,18 +15,21 @@ public class UserDto {
     private String lastName;
     @JsonProperty("email")
     private String email;
+    @JsonProperty("password")
+    private String password;
 
     private List<ProductDto> products;
 
-    public UserDto(Long id, String firstName, String lastName, String email) {
+    public UserDto() {
     }
 
-    public UserDto(Long id, String firstName, String lastName, String email, List<ProductDto> products) {
+    public UserDto(Long id, String firstName, String lastName, String email,String password, List<ProductDto> products) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.products = products;
+        this.password = password;
 
     }
 

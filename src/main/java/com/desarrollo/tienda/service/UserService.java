@@ -66,20 +66,28 @@ public class UserService {
         }
     }
 
+    public UserModel findByOneEmail(String email) {
+        return this.userRepository.findByOneEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+
     public UserDto convertToDto(UserModel user) {
 
         List<ProductDto> productDto = user.getProducts().stream()
                 .map(product -> new ProductDto(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getUser().getId()))
                 .toList();
 
-        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), productDto);
+        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), productDto);
     }
+
 
     public UserModel convertToEntity(UserDto userDto) {
         UserModel user = new UserModel();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
         return user;
     }
 
